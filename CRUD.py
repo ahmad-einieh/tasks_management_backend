@@ -3,6 +3,8 @@ from azure.cosmos import  CosmosClient
 
 from models import User , Task
 
+import uuid
+
 # Initialize the Cosmos DB client
 endpoint = "https://ahmadeinieh.documents.azure.com:443/"
 key = "co6xHurFZbrgPkWebmCqdVHQIWflPuSZZBHx48nU8QklUl8GoXYxLPryBaHhXcpdmxqUNvw9i7j8ACDbVSOUlg=="
@@ -23,12 +25,24 @@ task_container = database.create_container_if_not_exists(id=task_container_name,
 
 # Create a user
 def create_user(user: User):
+    user.id = uuid.uuid4().__str__()
     container.create_item(body=user.dict())
+
+def get_user_by_email(email: str) -> Optional[User]:
+    query = f"SELECT * FROM {container_name} c WHERE c.email = @email"
+    items = list(container.query_items(query,
+                                    parameters=[{"name": "@email", "value": email}],
+                                    enable_cross_partition_query=True  # Enable cross-partition query
+                                    ))
+
+    if items:
+        return User(**items[0])
+    return None
 
 # Retrieve a user by ID
 def get_user(user_id: str) -> Optional[User]:
     query = f"SELECT * FROM {container_name} c WHERE c.id = @user_id"
-    items = list(container.query_items(query, parameters=[{"name": "@user_id", "value": user_id}]))
+    items = list(container.query_items(query, parameters=[{"name": "@user_id", "value": user_id}],enable_cross_partition_query=True))
     if items:
         return User(**items[0])
     return None
@@ -48,12 +62,13 @@ def delete_user(user_id: str):
 
 # Create a task
 def create_task(task: Task):
+    task.id = uuid.uuid4().__str__()
     task_container.create_item(body=task.dict())
 
 # Retrieve a task by ID
 def get_task(task_id: str) -> Optional[Task]:
     query = f"SELECT * FROM {task_container_name} c WHERE c.id = @task_id"
-    items = list(task_container.query_items(query, parameters=[{"name": "@task_id", "value": task_id}]))
+    items = list(task_container.query_items(query, parameters=[{"name": "@task_id", "value": task_id}],enable_cross_partition_query=True))
     if items:
         return Task(**items[0])
     return None
@@ -74,5 +89,5 @@ def delete_task(task_id: str):
 # Get tasks by userId
 def get_tasks_by_user_id(user_id: str) -> List[Task]:
     query = f"SELECT * FROM {task_container_name} c WHERE ARRAY_CONTAINS(c.owner, {{'id': '{user_id}'}})"
-    items = list(task_container.query_items(query))
+    items = list(task_container.query_items(query,enable_cross_partition_query=True))
     return [Task(**item) for item in items]
