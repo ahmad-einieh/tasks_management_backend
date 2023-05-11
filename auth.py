@@ -38,7 +38,7 @@ def generate_token(user: User):
 authRouter = APIRouter()
 
 
-@authRouter.post("login")
+@authRouter.post("/login")
 def login(email:str, password:str):
     user = verify_user(email, password)
     if user:
