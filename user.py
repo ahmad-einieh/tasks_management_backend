@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 import CRUD as crud
 from models import User
+import time
 
 userRouter = APIRouter()
 
@@ -10,6 +11,7 @@ async def get_user(userId: str):
 
 @userRouter.post("/create_user")
 async def create_user(user: User):
+    user.created_at = time.time()
     return crud.create_user(user)
 
 @userRouter.put("/update_user")
@@ -19,5 +21,3 @@ async def update_user(userId: str, updated_user: User):
 @userRouter.delete("/delete_user")
 async def delete_user(userId: str):
     return crud.delete_user(userId)
-
-

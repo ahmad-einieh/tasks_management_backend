@@ -76,6 +76,3 @@ def get_tasks_by_user_id(user_id: str) -> List[Task]:
     query = f"SELECT * FROM {task_container_name} c WHERE ARRAY_CONTAINS(c.owner, {{'id': '{user_id}'}})"
     items = list(task_container.query_items(query))
     return [Task(**item) for item in items]
-
-
-# create_user(User(id="1", name="Alice", email="a", password="a"))

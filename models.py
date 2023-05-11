@@ -7,19 +7,19 @@ class User(BaseModel):
     name: Optional[str] = None
     email: str
     password: str
+    created_at: Optional[int]
 
 # A model for tasks
 class Task(BaseModel):
     id: str
     title: str
     description: Optional[str] = None
-    # owner: list[User] # A task can have multiple owners need to edit code letter to make it work
-    owner : User
-    date: int
-    status: bool = False
-    priority: Optional[int] = 1
+    isComplete: bool = False
     category: Optional[str] = None
     tags: Optional[list[str]] = []
+    userId: str
+    created_at: Optional[int]
+    end_at: Optional[int]
 
 
 # Create a token model with access token and token type
