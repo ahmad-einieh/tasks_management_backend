@@ -1,0 +1,5 @@
+azure_storage==0.37.0
+fastapi==0.95.1
+pydantic==1.10.4
+PyJWT==2.7.0
+uvicorn==0.22.0
