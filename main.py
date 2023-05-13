@@ -5,7 +5,6 @@ from auth import authRouter
 from task import taskRouter
 # import uvicorn
 
-
 # pipreqs
 
 app = FastAPI()
