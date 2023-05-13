@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response
 import CRUD as crud
-from models import  Task, TaskUpdate
+from models import  Task
 import time
 
 taskRouter = APIRouter()
@@ -22,33 +22,21 @@ async def create_task(res:Response,task: Task):
             task.end_at = task.created_at + task.length
         else:
             task.created_at = time.time()
-        crud.create_task(task)
-        return {"message":"task created successfully"}
+        created_task = crud.create_task(task)
+        return {"message":"task created successfully","task":created_task}
     except:
         res.status_code = 400
         return {"message":"can not create task"}
 
 
 @taskRouter.put("/update_task")
-async def update_task(res:Response,taskId: str, updated_task: TaskUpdate):
+async def update_task(res:Response,taskId: str, updated_task: Task):
     try:
-        old_task = crud.get_task(taskId)
-        if updated_task.add_length:
-            old_task.length += updated_task.add_length
-
-        if updated_task.title:
-            old_task.title = updated_task.title
-        if updated_task.description:
-            old_task.description = updated_task.description
-        if updated_task.isComplete:
-            old_task.isComplete = updated_task.isComplete
-        if updated_task.category:
-            old_task.category = updated_task.category
-        if updated_task.tags:
-            old_task.tags = updated_task.tags
-
-        crud.update_task(taskId, old_task)
-        return {"message":"task updated successfully"}
+        value = crud.update_task(taskId,updated_task)
+        if value:
+            return {"message":"task updated successfully"}
+        res.status_code = 404
+        return {"message":"task not found"}
     except:
         res.status_code = 400
         return {"message":"can not update task"}

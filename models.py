@@ -23,10 +23,14 @@ class Task(BaseModel):
     created_at: Optional[float]
     end_at: Optional[float]
 
-class TaskUpdate(BaseModel):
-    title: Optional[str] = None
-    description: Optional[str] = None
-    isComplete: Optional[bool] = None
-    category: Optional[str] = None
-    tags: Optional[List[str]] = None
-    add_length: Optional[int] = None
+class TaskDocument(BaseModel):
+    id: str
+    title: str
+    description: Optional[str]
+    isComplete: bool
+    category: Optional[str]
+    tags: Optional[List[str]]
+    userId: str
+    length: Optional[int]
+    created_at: Optional[float]
+    end_at: Optional[float]

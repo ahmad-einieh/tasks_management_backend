@@ -1,7 +1,7 @@
 from typing import Optional,List
 from azure.cosmos import  CosmosClient
 
-from models import User , Task
+from models import User , Task , TaskDocument
 
 import uuid
 
@@ -64,6 +64,7 @@ def delete_user(user_id: str):
 def create_task(task: Task):
     task.id = uuid.uuid4().__str__()
     task_container.create_item(body=task.dict())
+    return task
 
 # Retrieve a task by ID
 def get_task(task_id: str) -> Optional[Task]:
@@ -73,21 +74,35 @@ def get_task(task_id: str) -> Optional[Task]:
         return Task(**items[0])
     return None
 
-# Update a task
-def update_task(task_id: str, updated_task: Task):
-    task = get_task(task_id)
-    if task:
-        task_data = updated_task.dict(exclude_unset=True)
-        task_container.replace_item(item=task_data, partition_key=task_id)
+
+# def update_task(task_id: str, updated_task: Task) -> Optional[Task]:
+#     updated_task.id = task_id
+#     task_document = TaskDocument(**updated_task.dict())
+#     container.upsert_item(body=task_document.dict(), partition_key=task_id)
+#     new_task = get_task(task_id)
+#     return new_task
+
+def update_task(task_id: str, updated_task: Task) -> Optional[Task]:
+    existing_task = get_task(task_id)
+    if existing_task:
+        updated_fields = updated_task.dict(exclude_unset=True)
+        for field, value in updated_fields.items():
+            setattr(existing_task, field, value)
+        task_document = TaskDocument(**existing_task.dict(), id=task_id)
+        container.upsert_item(body=task_document.dict(), partition_key=task_id)
+        return existing_task
+    return None
+
 
 # Delete a task
 def delete_task(task_id: str):
     task = get_task(task_id)
     if task:
-        task_container.delete_item(item=task.dict(), partition_key=task_id)
+        print(task)
+        task_container.delete_item(item=task.id, partition_key=task_id)
 
 # Get tasks by userId
-def get_tasks_by_user_id(user_id: str) -> List[Task]:
-    query = f"SELECT * FROM {task_container_name} c WHERE ARRAY_CONTAINS(c.owner, {{'id': '{user_id}'}})"
-    items = list(task_container.query_items(query,enable_cross_partition_query=True))
+def get_tasks_by_user_id(user_id: str) -> List['Task']:
+    query = f"SELECT * FROM {task_container_name} c WHERE c.userId = '{user_id}'"
+    items = list(task_container.query_items(query, enable_cross_partition_query=True))
     return [Task(**item) for item in items]
