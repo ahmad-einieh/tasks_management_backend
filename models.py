@@ -28,5 +28,5 @@ class TaskUpdate(BaseModel):
     description: Optional[str] = None
     isComplete: Optional[bool] = None
     category: Optional[str] = None
-    tags: Optional[list[str]] = None
+    tags: Optional[List[str]] = None
     add_length: Optional[int] = None
