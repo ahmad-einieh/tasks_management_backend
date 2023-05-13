@@ -1,5 +1,5 @@
 from pydantic import BaseModel,Field
-from typing import Optional
+from typing import Optional ,List
 import uuid
 
 # A model for users
@@ -17,7 +17,7 @@ class Task(BaseModel):
     description: Optional[str] = None
     isComplete: bool = False
     category: Optional[str] = None
-    tags: Optional[list[str]] = []
+    tags: Optional[List[str]] = []
     userId: str
     length: Optional[int] = None
     created_at: Optional[float]
