@@ -6,18 +6,6 @@ import hashing as hash
 
 userRouter = APIRouter()
 
-@userRouter.get("/get_user")
-async def get_user(response:Response, userId: str):
-    try:
-        user = crud.get_user(userId)
-        del user.password
-        del user.created_at
-        return user
-    except:
-        response.status_code = 404
-        return {"message":"user not found"}
-
-
 @userRouter.post("/create_user")
 async def create_user(res:Response, user: User):
     if crud.get_user_by_email(user.email):
@@ -33,6 +21,17 @@ async def create_user(res:Response, user: User):
         res.status_code = 400
         return {"message":"can not create user"}
 
+
+# @userRouter.get("/get_user")
+# async def get_user(response:Response, userId: str):
+#     try:
+#         user = crud.get_user(userId)
+#         del user.password
+#         del user.created_at
+#         return user
+#     except:
+#         response.status_code = 404
+#         return {"message":"user not found"}
 
 # @userRouter.put("/update_user")
 # async def update_user(userId: str, updated_user: User):

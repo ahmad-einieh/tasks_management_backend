@@ -10,6 +10,19 @@ import hashing as hash
 
 SECRET_KEY = "this_is_a_secret_key_for_development"
 
+authRouter = APIRouter()
+
+@authRouter.post("/login")
+def login(email:str, password:str):
+    user = verify_user(email, password)
+    if user:
+        # token = generate_token(user)
+        del user.password
+        del user.created_at
+        return user
+    raise HTTPException(status_code=401, detail="Invalid email or password")
+
+
 def verify_user(email: str, password: str) -> Optional[User]:
     db_user = crud.get_user_by_email(email)
     if db_user and hash.verfiy(password, db_user.password):
@@ -32,17 +45,3 @@ def verify_user(email: str, password: str) -> Optional[User]:
 #         return None
 #     except jwt.PyJWTError:
 #         return None
-
-
-authRouter = APIRouter()
-
-
-@authRouter.post("/login")
-def login(email:str, password:str):
-    user = verify_user(email, password)
-    if user:
-        # token = generate_token(user)
-        del user.password
-        del user.created_at
-        return user
-    raise HTTPException(status_code=401, detail="Invalid email or password")

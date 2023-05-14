@@ -5,15 +5,6 @@ import time
 
 taskRouter = APIRouter()
 
-@taskRouter.get("/get_task")
-async def get_task(res:Response, taskId: str):
-    try:
-        return crud.get_task(taskId)
-    except:
-        res.status_code = 404
-        return {"message":"task not found"}
-
-
 @taskRouter.post("/create_task")
 async def create_task(res:Response,task: Task):
     try:
@@ -27,19 +18,6 @@ async def create_task(res:Response,task: Task):
     except:
         res.status_code = 400
         return {"message":"can not create task"}
-
-
-@taskRouter.put("/update_task")
-async def update_task(res:Response,taskId: str, updated_task: Task):
-    try:
-        value = crud.update_task(taskId,updated_task)
-        if value:
-            return {"message":"task updated successfully"}
-        res.status_code = 404
-        return {"message":"task not found"}
-    except:
-        res.status_code = 400
-        return {"message":"can not update task"}
 
 @taskRouter.delete("/delete_task")
 async def delete_task(res:Response,taskId: str):
@@ -57,3 +35,23 @@ async def get_all_tasks(res:Response,userId: str):
     except:
         res.status_code = 400
         return {"message":"can not get tasks"}
+    
+@taskRouter.get("/get_task")
+async def get_task(res:Response, taskId: str):
+    try:
+        return crud.get_task(taskId)
+    except:
+        res.status_code = 404
+        return {"message":"task not found"}
+
+# @taskRouter.put("/update_task")
+# async def update_task(res:Response,taskId: str, updated_task: Task):
+#     try:
+#         value = crud.update_task(taskId,updated_task)
+#         if value:
+#             return {"message":"task updated successfully"}
+#         res.status_code = 404
+#         return {"message":"task not found"}
+#     except:
+#         res.status_code = 400
+#         return {"message":"can not update task"}

@@ -21,7 +21,7 @@ class Task(BaseModel):
     userId: str
     length: Optional[int] = None
     created_at: Optional[float]
-    end_at: Optional[float]
+    end_at: Optional[float] = None
 
 class TaskDocument(BaseModel):
     id: str
