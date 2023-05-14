@@ -48,6 +48,18 @@ async def get_task(res: Response, taskId: str):
     except:
         res.status_code = 404
         return {"message": "error on get task"}
+    
+import traceback
+
+@taskRouter.put("/update_task_complete")
+async def update_task_complete(res: Response, taskId: str, isComplete: bool):
+    try:
+        crud.update_complete_task(taskId, isComplete)
+        return {"message": "task updated successfully"}
+    except:
+        res.status_code = 400
+        return {"message": "can not update task"}
+
 
 # @taskRouter.put("/update_task")
 # async def update_task(res:Response,taskId: str, updated_task: Task):

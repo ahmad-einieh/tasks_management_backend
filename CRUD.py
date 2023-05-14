@@ -99,3 +99,10 @@ def get_tasks_by_user_id(user_id: str) -> List['Task']:
     query = f"SELECT * FROM {task_container_name} c WHERE c.userId = '{user_id}'"
     items = list(task_container.query_items(query, enable_cross_partition_query=True))
     return [Task(**item) for item in items]
+
+def update_complete_task(taskId: str, isComplete: bool):
+    task = get_task(taskId)
+    if task:
+        delete_task(taskId)
+        task.isComplete = isComplete
+        create_task(task)
