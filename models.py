@@ -5,7 +5,7 @@ import uuid
 # A model for users
 class User(BaseModel):
     id: str = Field(default_factory=uuid.uuid4.__str__, alias='id')    
-    # name: Optional[str] = None
+    name: Optional[str] = None
     email: str
     password: str
     created_at: Optional[float]
