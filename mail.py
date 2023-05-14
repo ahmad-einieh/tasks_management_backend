@@ -6,7 +6,6 @@ from pydantic import BaseModel
 
 mailRouter = APIRouter()
 
-
 class EmailSchema(BaseModel):
     recipient: str
     body: str

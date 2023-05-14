@@ -9,7 +9,10 @@ userRouter = APIRouter()
 @userRouter.get("/get_user")
 async def get_user(response:Response, userId: str):
     try:
-        return crud.get_user(userId)
+        user = crud.get_user(userId)
+        del user.password
+        del user.created_at
+        return user
     except:
         response.status_code = 404
         return {"message":"user not found"}

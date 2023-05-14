@@ -1,9 +1,8 @@
 
-from fastapi import  Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from pydantic import BaseModel
+from fastapi import HTTPException #,Depends
+# from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import Optional
-import jwt
+# import jwt
 from fastapi import APIRouter
 import CRUD as crud
 from models import User
@@ -18,9 +17,9 @@ def verify_user(email: str, password: str) -> Optional[User]:
     return None
 
 
-def generate_token(user: User):
-    encoded_data = jwt.encode({"email": user.email,"userId":user.id}, SECRET_KEY, algorithm="HS256") 
-    return {"access_token":encoded_data}
+# def generate_token(user: User):
+#     encoded_data = jwt.encode({"email": user.email,"userId":user.id}, SECRET_KEY, algorithm="HS256") 
+#     return encoded_data
 
 
 # def decode_token(token: str) -> Optional[User]:
@@ -42,6 +41,8 @@ authRouter = APIRouter()
 def login(email:str, password:str):
     user = verify_user(email, password)
     if user:
-        token = generate_token(user)
-        return token
+        # token = generate_token(user)
+        del user.password
+        del user.created_at
+        return user
     raise HTTPException(status_code=401, detail="Invalid email or password")
