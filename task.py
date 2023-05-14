@@ -14,7 +14,7 @@ async def create_task(res:Response,task: Task):
         else:
             task.created_at = time.time()
         created_task = crud.create_task(task)
-        return {"message":"task created successfully","task":created_task}
+        return {"message":"task created successfully"}
     except:
         res.status_code = 400
         return {"message":"can not create task"}
