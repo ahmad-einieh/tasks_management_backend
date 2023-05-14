@@ -1,5 +1,5 @@
 
-from fastapi import HTTPException #,Depends
+from fastapi import Body, HTTPException  # ,Depends
 # from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import Optional
 # import jwt
@@ -12,8 +12,9 @@ SECRET_KEY = "this_is_a_secret_key_for_development"
 
 authRouter = APIRouter()
 
+
 @authRouter.post("/login")
-def login(email:str, password:str):
+def login(email: str = Body(), password: str = Body()):
     user = verify_user(email, password)
     if user:
         # token = generate_token(user)
@@ -31,7 +32,7 @@ def verify_user(email: str, password: str) -> Optional[User]:
 
 
 # def generate_token(user: User):
-#     encoded_data = jwt.encode({"email": user.email,"userId":user.id}, SECRET_KEY, algorithm="HS256") 
+#     encoded_data = jwt.encode({"email": user.email,"userId":user.id}, SECRET_KEY, algorithm="HS256")
 #     return encoded_data
 
 

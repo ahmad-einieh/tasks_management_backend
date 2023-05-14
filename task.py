@@ -1,45 +1,53 @@
 from fastapi import APIRouter, Response
 import CRUD as crud
-from models import  Task
+from models import Task
 import time
 
 taskRouter = APIRouter()
 
+
 @taskRouter.post("/create_task")
-async def create_task(res:Response,task: Task):
+async def create_task(res: Response, task: Task):
     try:
         if task.created_at is None:
             task.created_at = time.time()
         crud.create_task(task)
-        return {"message":"task created successfully"}
+        return {"message": "task created successfully"}
     except:
         res.status_code = 400
-        return {"message":"can not create task"}
+        return {"message": "can not create task"}
+
 
 @taskRouter.delete("/delete_task")
-async def delete_task(res:Response,taskId: str):
+async def delete_task(res: Response, taskId: str):
     try:
         crud.delete_task(taskId)
-        return {"message":"task deleted successfully"}
+        return {"message": "task deleted successfully"}
     except:
         res.status_code = 400
-        return {"message":"can not delete task"}
+        return {"message": "can not delete task"}
+
 
 @taskRouter.get("/get_all_tasks")
-async def get_all_tasks(res:Response,userId: str):
+async def get_all_tasks(res: Response, userId: str):
     try:
         return crud.get_tasks_by_user_id(userId)
     except:
         res.status_code = 400
-        return {"message":"can not get tasks"}
-    
+        return {"message": "can not get tasks"}
+
+
 @taskRouter.get("/get_task")
-async def get_task(res:Response, taskId: str):
+async def get_task(res: Response, taskId: str):
     try:
-        return crud.get_task(taskId)
+        task = crud.get_task(taskId)
+        if task:
+            return task
+        res.status_code = 404
+        return {"message": "task not found"}
     except:
         res.status_code = 404
-        return {"message":"task not found"}
+        return {"message": "error on get task"}
 
 # @taskRouter.put("/update_task")
 # async def update_task(res:Response,taskId: str, updated_task: Task):
