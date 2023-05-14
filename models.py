@@ -17,8 +17,7 @@ class Task(BaseModel):
     description: Optional[str] = None
     isComplete: bool = False
     # category: Optional[str] = None
-    # tags: Optional[List[str]] = []
-    userId: str
+    userId: List[str]
     created_at: Optional[float]
     end_at: Optional[float] = None
 
@@ -28,7 +27,6 @@ class TaskDocument(BaseModel):
     description: Optional[str]
     isComplete: bool
     # category: Optional[str]
-    # tags: Optional[List[str]]
-    userId: str
+    userId: List[str]
     created_at: Optional[float]
     end_at: Optional[float]

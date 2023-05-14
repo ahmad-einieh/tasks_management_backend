@@ -27,7 +27,6 @@ async def delete_task(res: Response, taskId: str):
         res.status_code = 400
         return {"message": "can not delete task"}
 
-
 @taskRouter.get("/get_all_tasks")
 async def get_all_tasks(res: Response, userId: str):
     try:
@@ -35,7 +34,6 @@ async def get_all_tasks(res: Response, userId: str):
     except:
         res.status_code = 400
         return {"message": "can not get tasks"}
-
 
 @taskRouter.get("/get_task")
 async def get_task(res: Response, taskId: str):
@@ -49,7 +47,6 @@ async def get_task(res: Response, taskId: str):
         res.status_code = 404
         return {"message": "error on get task"}
     
-import traceback
 
 @taskRouter.put("/update_task_complete")
 async def update_task_complete(res: Response, taskId: str, isComplete: bool):
@@ -59,16 +56,13 @@ async def update_task_complete(res: Response, taskId: str, isComplete: bool):
     except:
         res.status_code = 400
         return {"message": "can not update task"}
+    
 
-
-# @taskRouter.put("/update_task")
-# async def update_task(res:Response,taskId: str, updated_task: Task):
-#     try:
-#         value = crud.update_task(taskId,updated_task)
-#         if value:
-#             return {"message":"task updated successfully"}
-#         res.status_code = 404
-#         return {"message":"task not found"}
-#     except:
-#         res.status_code = 400
-#         return {"message":"can not update task"}
+@taskRouter.put("/add_user_to_task")
+async def add_user_to_task(res: Response, taskId: str, userEmail: str):
+    try:
+        crud.add_user_to_task(taskId, userEmail)
+        return {"message": "user added successfully"}
+    except:
+        res.status_code = 400
+        return {"message": "can not add user to task"}
