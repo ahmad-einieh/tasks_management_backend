@@ -75,13 +75,6 @@ def get_task(task_id: str) -> Optional[Task]:
     return None
 
 
-# def update_task(task_id: str, updated_task: Task) -> Optional[Task]:
-#     updated_task.id = task_id
-#     task_document = TaskDocument(**updated_task.dict())
-#     container.upsert_item(body=task_document.dict(), partition_key=task_id)
-#     new_task = get_task(task_id)
-#     return new_task
-
 def update_task(task_id: str, updated_task: Task) -> Optional[Task]:
     existing_task = get_task(task_id)
     if existing_task:

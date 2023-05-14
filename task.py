@@ -8,12 +8,9 @@ taskRouter = APIRouter()
 @taskRouter.post("/create_task")
 async def create_task(res:Response,task: Task):
     try:
-        if task.length:
+        if task.created_at is None:
             task.created_at = time.time()
-            task.end_at = task.created_at + task.length
-        else:
-            task.created_at = time.time()
-        created_task = crud.create_task(task)
+        crud.create_task(task)
         return {"message":"task created successfully"}
     except:
         res.status_code = 400

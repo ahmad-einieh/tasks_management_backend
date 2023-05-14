@@ -19,7 +19,6 @@ class Task(BaseModel):
     category: Optional[str] = None
     tags: Optional[List[str]] = []
     userId: str
-    length: Optional[int] = None
     created_at: Optional[float]
     end_at: Optional[float] = None
 
@@ -31,6 +30,5 @@ class TaskDocument(BaseModel):
     category: Optional[str]
     tags: Optional[List[str]]
     userId: str
-    length: Optional[int]
     created_at: Optional[float]
     end_at: Optional[float]
