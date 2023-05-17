@@ -21,7 +21,7 @@ class Task(BaseModel):
     created_at: Optional[float]
     end_at: Optional[float] = None
 
-class TaskDocument(BaseModel):
+class TaskDocument(BaseModel):  
     id: str
     title: str
     description: Optional[str]
