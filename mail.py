@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from email.mime.text import MIMEText
 import smtplib
+import os
 
 from pydantic import BaseModel
 
@@ -15,8 +16,8 @@ def send_email(email: EmailSchema):
     try:
         server = smtplib.SMTP('smtp-mail.outlook.com', 587)
         server.starttls()
-        my_email = 'mail@hotmail.com'
-        server.login(my_email, 'email pass')
+        my_email = os.environ['SMTP_USERNAME']
+        server.login(my_email, os.environ['SMTP_PASSWORD'])
         message = MIMEText(email.body)
         message['From'] = my_email
         message['To'] = email.recipient

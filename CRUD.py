@@ -4,10 +4,11 @@ from azure.cosmos import  CosmosClient
 from models import User , Task , TaskDocument
 
 import uuid
+import os
 
 # Initialize the Cosmos DB client
-endpoint = "https://ahmadeinieh.documents.azure.com:443/"
-key = "co6xHurFZbrgPkWebmCqdVHQIWflPuSZZBHx48nU8QklUl8GoXYxLPryBaHhXcpdmxqUNvw9i7j8ACDbVSOUlg=="
+endpoint = os.environ["COSMOS_ENDPOINT"]
+key = os.environ["COSMOS_KEY"]
 client = CosmosClient(endpoint, key)
 
 # Create or retrieve the database

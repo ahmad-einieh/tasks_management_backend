@@ -8,8 +8,6 @@ import CRUD as crud
 from models import User
 import hashing as hash
 
-SECRET_KEY = "this_is_a_secret_key_for_development"
-
 authRouter = APIRouter()
 
 
